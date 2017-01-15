@@ -1,0 +1,15 @@
+[submodule "euler-paper"]
+	path = euler-paper
+	url = git@github.com:Awk34/euler-paper.git
+[submodule "euler-scraper"]
+	path = euler-scraper
+	url = git@github.com:Awk34/euler-scraper.git
+[submodule "euler-rust"]
+	path = euler-rust
+	url = git@github.com:Awk34/euler-rust.git
+[submodule "euler-java"]
+	path = euler-java
+	url = git@github.com:Awk34/euler-java.git
+[submodule "euler-js"]
+	path = euler-js
+	url = git@github.com:Awk34/euler-js.git
