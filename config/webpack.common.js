@@ -4,6 +4,7 @@
 
 const webpack = require('webpack');
 const helpers = require('./helpers');
+const path = require('path');
 
 /*
  * Webpack Plugins
@@ -94,7 +95,11 @@ module.exports = function (options) {
       rules: [
         {
           test: /\.js$/,
-          use: 'babel-loader'
+          use: 'babel-loader',
+          include: [
+            path.resolve(__dirname, '../src'),
+            path.resolve(__dirname, '../euler-js'),
+          ],
         },
 
         /*
