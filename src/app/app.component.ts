@@ -29,9 +29,6 @@ import { AppState } from './app.service';
       <button md-button [routerLink]=" ['./home'] " routerLinkActive="active">
         Home
       </button>
-      <!--<button md-button [routerLink]=" ['./detail'] " routerLinkActive="active">-->
-        <!--Detail-->
-      <!--</button>-->
       <button md-button [routerLink]=" ['./about'] " routerLinkActive="active">
         About
       </button>
