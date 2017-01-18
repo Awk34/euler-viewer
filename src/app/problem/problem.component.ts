@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import hljs from 'highlightjs';
 import { get } from 'lodash-es';
 
-const availableProblems = require.context('../../../../js', false, /^(.\/)([0-9]+$)/)
+const availableProblems = require.context('../../../euler-js/src', false, /^(.\/)([0-9]+$)/)
   .keys()
   .map(s => parseInt(s.replace('./', '')))
   .sort((a, b) => a - b);
@@ -45,13 +45,6 @@ const availableProblems = require.context('../../../../js', false, /^(.\/)([0-9]
           <span>Solution: <code>{{solution}}</code></span>
       </div>
     </div>
-
-    <!--<span>-->
-      <!--<a [routerLink]=" ['./child-detail'] ">-->
-        <!--Child Detail-->
-      <!--</a>-->
-    <!--</span>-->
-    <!--<router-outlet></router-outlet>-->
   `,
 })
 export class ProblemComponent implements OnInit {
@@ -78,7 +71,7 @@ export class ProblemComponent implements OnInit {
       this.error = 'Sorry, I don\'t have a JS solution for that one yet!';
     }
 
-    console.log(require(`!!raw-loader!../../../../scraped/${this.n}/${this.n}.md`));
+    console.log(require(`!!raw-loader!../../../euler-scraper/scraped/${this.n}/${this.n}.md`));
 
     console.log('hello `Problem` component');
   }
@@ -88,11 +81,11 @@ export class ProblemComponent implements OnInit {
 
     // import(`!!raw-loader!../../../../js/${4}`).then(module => {}).catch(e => {});
     require.ensure([], require => {
-      code = require(`!!raw-loader!../../../../js/${number}`);
+      code = require(`!!raw-loader!../../../euler-js/src/${number}`);
 
       this.jsText = hljs.highlightAuto(code).value;
 
-      const ProblemConstructor = require(`../../../../js/${number}`).default;
+      const ProblemConstructor = require(`../../../euler-js/src/${number}`).default;
 
       this.problem = new ProblemConstructor();
     });

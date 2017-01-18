@@ -7,7 +7,7 @@ import { AppState } from '../app.service';
 import { Title } from './title';
 // import { XLargeDirective } from './x-large';
 
-const availableProblems = require.context('../../../../js', false, /^(.\/)([0-9]+$)/)
+const availableProblems = require.context('../../../euler-js/src', false, /^(.\/)([0-9]+$)/)
   .keys()
   .map(s => parseInt(s.replace('./', '')))
   .sort((a, b) => a - b);
