@@ -99,6 +99,8 @@ module.exports = function (options) {
           include: [
             path.resolve(__dirname, '../src'),
             path.resolve(__dirname, '../euler-js'),
+            path.resolve(__dirname, '../node_modules/exectimer'),
+            path.resolve(__dirname, '../euler-js/node_modules/exectimer'),
           ],
         },
 
