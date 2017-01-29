@@ -8,6 +8,7 @@ import {
   get,
   padStart,
 } from 'lodash-es';
+import solutions from '../../assets/solutions.json';
 
 const availableJs = require.context('../../../euler-js/src', false, /^(.\/)([0-9]+$)/)
   .keys()
@@ -53,23 +54,23 @@ const availableRust = require.context('!!raw-loader!../../../euler-rust/src/prob
       <!--<select name="problem" id="problem" (change)="onChange($event.target.value)">-->
           <!--<option value="{{problem}}" *ngFor="let problem of availableProblems">{{problem}}</option>-->
       <!--</select>-->
-      <div style="margin: 10px; display: flex; justify-content: center;">
+      <div style="margin: 10px; display: flex; justify-content: center; align-items: center;">
         <button style="padding: 10px; margin: 0 10px;" md-raised-button color="accent" [disabled]="!jsText" (click)="selectLang('js')"><md-icon style="height: 50px; width: 50px;" svgIcon="js"></md-icon></button>
         <button style="padding: 10px; margin: 0 10px;" md-raised-button color="accent" [disabled]="!rustText" (click)="selectLang('rust')"><md-icon style="height: 50px; width: 50px;" svgIcon="rust"></md-icon></button>
         <button style="padding: 10px; margin: 0 10px;" md-raised-button color="accent" [disabled]="!javaText" (click)="selectLang('java')"><md-icon style="height: 50px; width: 50px;" svgIcon="java"></md-icon></button>
+        
+        <div style="margin: 10px 20px;">
+          <span>Duration: {{duration}}</span>
+          <br>
+          <span>Solution: <code>{{solution}}</code></span>
+          <md-icon [class.hidden]="correct !== true">check</md-icon>
+          <md-icon [class.hidden]="correct !== false">close</md-icon>
+        </div>
       </div>
       
       <pre [class.hidden]="lang !== 'js'" class="hljs" style="margin: 0;"><code [innerHtml]="jsText"></code></pre>
       <pre [class.hidden]="lang !== 'rust'" class="hljs" style="margin: 0;"><code [innerHtml]="rustText"></code></pre>
       <pre [class.hidden]="lang !== 'java'" class="hljs" style="margin: 0;"><code [innerHtml]="javaText"></code></pre>
-
-      <br>
-
-      <div style="margin: 10px 20px;">
-          <span>Duration: {{duration}}</span>
-          <br>
-          <span>Solution: <code>{{solution}}</code></span>
-      </div>
     </div>
   `,
 })
@@ -82,6 +83,7 @@ export class ProblemComponent implements OnInit {
   problemHtml: string;
   duration;
   solution;
+  correct: boolean;
   n;
   error: string;
   running: boolean = false;
@@ -125,10 +127,6 @@ export class ProblemComponent implements OnInit {
     this.problemHtml = problemHtml;
 
     if(!problemHtml) return;
-
-    console.log(problemHtml);
-
-    console.log('hello `Problem` component');
   }
 
   loadJs(number) {
@@ -160,6 +158,7 @@ export class ProblemComponent implements OnInit {
     let {duration, solution} = this.problem.run();
     this.duration = `${parseInt(duration)}ms`;
     this.solution = solution;
+    this.correct = solutions[this.n] !== null ? solution == solutions[this.n] : null;
     this.running = false;
   }
 }
