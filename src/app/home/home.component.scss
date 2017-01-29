@@ -1,3 +1,5 @@
+@import "../md-theme";
+
 /*styles for home content only*/
 .problems-list {
   display: flex;
@@ -16,6 +18,12 @@
   border-radius: 2px;
 }
 
-.js-sol {
-  background: orange;
+.sol-1 {
+  background: lighten(md-color($euler-app-primary, A200), 16%);
+}
+.sol-2 {
+  background: lighten(md-color($euler-app-primary, A200), 8%);
+}
+.sol-3 {
+  background: md-color($euler-app-primary, A200);
 }

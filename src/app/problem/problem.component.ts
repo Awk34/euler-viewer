@@ -21,7 +21,6 @@ const availableRust = require.context('!!raw-loader!../../../euler-rust/src/prob
   .keys()
   .map(s => parseInt(s.replace('./problem_', '').replace('.rs', '')))
   .sort((a, b) => a - b);
-console.log(availableRust);
 
 @Component({
   selector: 'about',

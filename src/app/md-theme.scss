@@ -16,8 +16,3 @@ $euler-app-warn:    md-palette($md-red);
 
 // Create the theme object (a Sass map containing all of the palettes).
 $euler-app-theme: md-light-theme($euler-app-primary, $euler-app-accent, $euler-app-warn);
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include angular-material-theme($euler-app-theme);
