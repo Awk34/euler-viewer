@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import {
@@ -14,7 +14,7 @@ import {
   RouterModule,
   PreloadAllModules
 } from '@angular/router';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule, MdIconRegistry } from '@angular/material';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -74,8 +74,14 @@ export class AppModule {
 
   constructor(
     public appRef: ApplicationRef,
-    public appState: AppState
-  ) {}
+    public appState: AppState,
+    public mdIconRegistry: MdIconRegistry,
+    sanitizer: DomSanitizer
+  ) {
+    mdIconRegistry.addSvgIcon('js', sanitizer.bypassSecurityTrustResourceUrl('/assets/img/js.svg'));
+    mdIconRegistry.addSvgIcon('rust', sanitizer.bypassSecurityTrustResourceUrl('/assets/img/rust.svg'));
+    mdIconRegistry.addSvgIcon('java', sanitizer.bypassSecurityTrustResourceUrl('/assets/img/java.svg'));
+  }
 
   public hmrOnInit(store: StoreType) {
     if (!store || !store.state) {
@@ -98,8 +104,7 @@ export class AppModule {
   public hmrOnDestroy(store: StoreType) {
     const cmpLocation = this.appRef.components.map((cmp) => cmp.location.nativeElement);
     // save state
-    const state = this.appState._state;
-    store.state = state;
+    store.state = this.appState._state;
     // recreate root elements
     store.disposeOldHosts = createNewHosts(cmpLocation);
     // save input values

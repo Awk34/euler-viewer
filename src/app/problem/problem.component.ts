@@ -54,9 +54,9 @@ const availableRust = require.context('!!raw-loader!../../../euler-rust/src/prob
           <!--<option value="{{problem}}" *ngFor="let problem of availableProblems">{{problem}}</option>-->
       <!--</select>-->
       <div style="margin: 10px; display: flex; justify-content: center;">
-        <button md-raised-button color="accent" [disabled]="!jsText" (click)="selectLang('js')">JS</button>
-        <button md-raised-button color="accent" [disabled]="!rustText" (click)="selectLang('rust')">Rust</button>
-        <button md-raised-button color="accent" [disabled]="!javaText" (click)="selectLang('java')">Java</button>
+        <button style="padding: 10px; margin: 0 10px;" md-raised-button color="accent" [disabled]="!jsText" (click)="selectLang('js')"><md-icon style="height: 50px; width: 50px;" svgIcon="js"></md-icon></button>
+        <button style="padding: 10px; margin: 0 10px;" md-raised-button color="accent" [disabled]="!rustText" (click)="selectLang('rust')"><md-icon style="height: 50px; width: 50px;" svgIcon="rust"></md-icon></button>
+        <button style="padding: 10px; margin: 0 10px;" md-raised-button color="accent" [disabled]="!javaText" (click)="selectLang('java')"><md-icon style="height: 50px; width: 50px;" svgIcon="java"></md-icon></button>
       </div>
       
       <pre [class.hidden]="lang !== 'js'" class="hljs" style="margin: 0;"><code [innerHtml]="jsText"></code></pre>
