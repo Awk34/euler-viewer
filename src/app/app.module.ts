@@ -16,6 +16,8 @@ import {
 } from '@angular/router';
 import { MaterialModule, MdIconRegistry } from '@angular/material';
 
+import 'hammerjs';
+
 /*
  * Platform and Environment providers/directives/pipes
  */
