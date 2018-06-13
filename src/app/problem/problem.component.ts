@@ -23,56 +23,13 @@ const availableRust = require.context('!!raw-loader!../../../euler-rust/src/prob
   .map(s => parseInt(s.replace('./problem_', '').replace('.rs', '')))
   .sort((a, b) => a - b);
 
+import loadWasm from '../../../euler-rust/src/lib.rs';
+
 @Component({
   selector: 'about',
   styles: [`
   `],
-  template: `
-    <md-toolbar class="secondary-toolbar">
-      <span class="title">Problem {{n}}</span>
-
-      <span style="flex: 1 1 auto;"></span>
-
-      <button md-icon-button [class.hidden]="lang !== 'js'" (click)="run()">
-        <md-icon>play_arrow</md-icon>
-      </button>
-      <!--<button md-icon-button>-->
-        <!--<md-icon>skip_next</md-icon>-->
-      <!--</button>-->
-    </md-toolbar>
-
-    <div [innerHtml]="problemHtml" style="margin: 10px 20px;"></div>
-    
-    <hr>
-
-    <div style="margin: 10px 20px;" [hidden]="!error">
-      <hr>
-      {{error}}
-    </div>
-
-    <div *ngIf="!error">
-      <!--<select name="problem" id="problem" (change)="onChange($event.target.value)">-->
-          <!--<option value="{{problem}}" *ngFor="let problem of availableProblems">{{problem}}</option>-->
-      <!--</select>-->
-      <div style="margin: 10px; display: flex; justify-content: center; align-items: center;">
-        <button style="padding: 10px; margin: 0 10px;" md-raised-button color="accent" [disabled]="!jsText" (click)="selectLang('js')"><md-icon style="height: 50px; width: 50px;" svgIcon="js"></md-icon></button>
-        <button style="padding: 10px; margin: 0 10px;" md-raised-button color="accent" [disabled]="!rustText" (click)="selectLang('rust')"><md-icon style="height: 50px; width: 50px;" svgIcon="rust"></md-icon></button>
-        <button style="padding: 10px; margin: 0 10px;" md-raised-button color="accent" [disabled]="!javaText" (click)="selectLang('java')"><md-icon style="height: 50px; width: 50px;" svgIcon="java"></md-icon></button>
-        
-        <div style="margin: 10px 20px;">
-          <span>Duration: {{duration}}</span>
-          <br>
-          <span>Solution: <code>{{solution}}</code></span>
-          <md-icon [class.hidden]="correct !== true">check</md-icon>
-          <md-icon [class.hidden]="correct !== false">close</md-icon>
-        </div>
-      </div>
-      
-      <pre [class.hidden]="lang !== 'js'" class="hljs" style="margin: 0;"><code [innerHtml]="jsText"></code></pre>
-      <pre [class.hidden]="lang !== 'rust'" class="hljs" style="margin: 0;"><code [innerHtml]="rustText"></code></pre>
-      <pre [class.hidden]="lang !== 'java'" class="hljs" style="margin: 0;"><code [innerHtml]="javaText"></code></pre>
-    </div>
-  `,
+  template: require('./problem.html'),
 })
 export class ProblemComponent implements OnInit {
   jsText: string;
@@ -102,6 +59,15 @@ export class ProblemComponent implements OnInit {
     let hasJsSolution = availableJs.includes(this.n);
     let hasRustSolution = availableRust.includes(this.n);
     let hasJavaSolution = availableJava.includes(this.n);
+
+    if(hasRustSolution) {
+      loadWasm().then(result => {
+        console.log(result);
+        console.log(`problem_${padStart(this.n, 3, '0')}`);
+        const main = result.instance.exports[`problem_${padStart(this.n, 3, '0')}`];
+        console.log('return value was', main());
+      });
+    }
 
     if(hasJsSolution) {
       this.loadJs(this.n);

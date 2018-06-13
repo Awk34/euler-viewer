@@ -48,7 +48,7 @@ type StoreType = {
 };
 
 /**
- * `AppModule` is the main entry point into Angular2's bootstraping process
+ * `AppModule` is the main entry point into Angular2's bootstrap process
  */
 @NgModule({
   bootstrap: [ AppComponent ],
@@ -73,16 +73,19 @@ type StoreType = {
   ]
 })
 export class AppModule {
-
   constructor(
     public appRef: ApplicationRef,
     public appState: AppState,
     public mdIconRegistry: MdIconRegistry,
     sanitizer: DomSanitizer
   ) {
-    mdIconRegistry.addSvgIcon('js', sanitizer.bypassSecurityTrustResourceUrl('/assets/img/js.svg'));
-    mdIconRegistry.addSvgIcon('rust', sanitizer.bypassSecurityTrustResourceUrl('/assets/img/rust.svg'));
-    mdIconRegistry.addSvgIcon('java', sanitizer.bypassSecurityTrustResourceUrl('/assets/img/java.svg'));
+    const icons = ['js', 'rust', 'java'];
+    for(const icon of icons) {
+      mdIconRegistry.addSvgIcon(
+        icon,
+        sanitizer.bypassSecurityTrustResourceUrl(`assets/img/${icon}.svg`
+      ));
+    }
   }
 
   public hmrOnInit(store: StoreType) {

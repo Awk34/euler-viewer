@@ -91,7 +91,6 @@ module.exports = function (options) {
      * See: http://webpack.github.io/docs/configuration.html#module
      */
     module: {
-
       rules: [
         {
           test: /\.js$/,
@@ -177,6 +176,21 @@ module.exports = function (options) {
         {
           test: /\.(jpg|png|gif)$/,
           use: 'file-loader'
+        },
+
+        /**
+         * https://github.com/dflemstr/rust-native-wasm-loader
+         */
+        {
+          test: /\.rs$/,
+          use: [{
+            loader: 'wasm-loader'
+          }, {
+            loader: 'rust-native-wasm-loader',
+            options: {
+              release: true
+            }
+          }]
         },
 
       ],
