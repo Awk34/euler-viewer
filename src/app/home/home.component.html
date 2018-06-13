@@ -2,9 +2,8 @@
   <span class="title">My Project Euler Solutions</span>
 </md-toolbar>
 <div class="card-container" style="padding: 20px;">
-
   <div class="problems-list">
-    <button [routerLink]="['../problem', problem.n]" *ngFor="let problem of problems" style="width: 3rem; height: 3rem; margin: 1px;" [ngClass]="{
+    <button [routerLink]="['/problem', problem.n]" *ngFor="let problem of problems" style="width: 3rem; height: 3rem; margin: 1px;" [ngClass]="{
       'sol-1': problem.solutions === 1,
       'sol-2': problem.solutions === 2,
       'sol-3': problem.solutions === 3
