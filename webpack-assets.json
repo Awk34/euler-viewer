@@ -1,44 +1,12 @@
 {
+  "vendor": {
+    "js": "/euler-viewer/vendor.cf78bb1d8d8ff5fea18e.bundle.js"
+  },
   "main": {
-    "js": "/euler-viewer/main.ee6f0f7dfc2548a13cc7.bundle.js",
+    "js": "/euler-viewer/main.3f9880ee784d0115d549.bundle.js",
     "css": "/euler-viewer/main.94f70b81864eff012d6e7264fdb29a51.css"
   },
   "polyfills": {
     "js": "/euler-viewer/polyfills.d595a9d754777e5694c0.bundle.js"
-  },
-  "": {
-    "txt": [
-      "/euler-viewer/assets/humans.txt",
-      "/euler-viewer/humans.txt",
-      "/euler-viewer/robots.txt",
-      "/euler-viewer/assets/robots.txt"
-    ],
-    "js": [
-      "/euler-viewer/0.ff2e6b6d140f32b92b81.chunk.js",
-      "/euler-viewer/2.6a9369216df6226fee84.chunk.js",
-      "/euler-viewer/3.d41d8cd98f00b204e980.chunk.js",
-      "/euler-viewer/5.a8a3e6eb1c77f2ac4adc.chunk.js",
-      "/euler-viewer/1.5bf4e447ff5750ec23d4.chunk.js",
-      "/euler-viewer/assets/service-worker.js"
-    ],
-    "json": [
-      "/euler-viewer/assets/solutions.json",
-      "/euler-viewer/assets/data.json",
-      "/euler-viewer/assets/manifest.json",
-      "/euler-viewer/assets/mock-data/mock-data.json"
-    ],
-    "": "/euler-viewer/assets/css/.gitkeep",
-    "png": [
-      "/euler-viewer/assets/img/angular-logo.png",
-      "/euler-viewer/assets/img/angularclass-avatar.png",
-      "/euler-viewer/assets/img/angularclass-logo.png"
-    ],
-    "svg": [
-      "/euler-viewer/assets/img/java.svg",
-      "/euler-viewer/assets/img/js.svg",
-      "/euler-viewer/assets/img/rust.svg"
-    ],
-    "jpg": "/euler-viewer/assets/img/portrait_2014.jpg",
-    "html": "/euler-viewer/index.html"
   }
 }
