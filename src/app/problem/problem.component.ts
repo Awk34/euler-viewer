@@ -66,6 +66,8 @@ export class ProblemComponent implements OnInit {
         console.log(`problem_${padStart(this.n, 3, '0')}`);
         const main = result.instance.exports[`problem_${padStart(this.n, 3, '0')}`];
         console.log('return value was', main());
+      }).catch(e => {
+        console.error(e);
       });
     }
 

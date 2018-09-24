@@ -15,7 +15,12 @@
   <% } %>
 
   <!-- base url -->
-  <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
+  <% if (webpackConfig.isProd) { %>
+  <base href="/euler-viewer/">
+  <% } else { %>
+  <base href="/">
+  <!--<base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">-->
+  <% } %>
 </head>
 
 <body>
