@@ -126,7 +126,7 @@
     "extract-text-webpack-plugin": "~2.0.0-beta.4",
     "file-loader": "^0.9.0",
     "gh-pages": "^1.2.0",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-gh-pages": "^0.5.4",
     "hammerjs": "^2.0.8",
     "html-webpack-plugin": "^2.21.0",
