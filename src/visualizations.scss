@@ -1,0 +1,11 @@
+.visualization .axis path,
+.visualization .axis line {
+  fill: none;
+  stroke: #666;
+  shape-rendering: crispEdges;
+}
+
+.visualization .axis text {
+  font-size: 12px;
+  fill: #333;
+}

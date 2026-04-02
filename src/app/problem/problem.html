@@ -1,0 +1,60 @@
+<div class="problem-body">
+    <markdown katex [src]="'/' + problemNumber + '/' + problemNumber + '.md'"></markdown>
+</div>
+
+<mat-toolbar class="language-toolbar">
+    <span>Select Language</span>
+    <span style="flex: 1 1 auto"></span>
+    <button matIconButton="filled" [disabled]="!hasTsSolution()" (click)="selectLang(Lang.js)">
+        <mat-icon svgIcon="js"></mat-icon>
+    </button>
+    <button matIconButton="filled" [disabled]="!hasRustSolution()" (click)="selectLang(Lang.rust)">
+        <mat-icon svgIcon="rust"></mat-icon>
+    </button>
+    <button matIconButton="filled" [disabled]="!hasJavaSolution()" (click)="selectLang(Lang.java)">
+        <mat-icon svgIcon="java"></mat-icon>
+    </button>
+</mat-toolbar>
+
+<div class="runner-container">
+    <mat-card class="runner-body">
+        <div class="runner-toolbar">
+            <button mat-icon-button="filled" (click)="run()">
+                <!-- <button mat-icon-button="filled" [disabled]="selectedLang() !== Lang.js" (click)="run()"> -->
+                <mat-icon>play_arrow</mat-icon>
+            </button>
+        </div>
+
+        @if (error) {
+            <div class="error">
+                {{ error }}
+            </div>
+        } @else {
+            <div>
+                <span>Duration: {{ duration() || 'n/a' }}</span>
+                <br />
+                <span>Solution: {{ solution() || 'n/a' }}</span>
+                <br />
+                <span>Steps: {{ steps() }}</span>
+                <br />
+                <span
+                    >Correct: <mat-icon>{{ resultIcon() }}</mat-icon></span
+                >
+            </div>
+        }
+    </mat-card>
+
+    <div class="visualization" #viz></div>
+</div>
+
+<div class="code-container">
+    @if (selectedLang() === Lang.js) {
+        <pre class="hljs"><code [innerHtml]="jsText | async"></code></pre>
+    } @else if (selectedLang() === Lang.rust) {
+        <pre class="hljs"><code [innerHtml]="rustText | async"></code></pre>
+    } @else if (selectedLang() === Lang.java) {
+        <pre class="hljs"><code [innerHtml]="javaText | async"></code></pre>
+    } @else {
+        No solutions for this problem yet.
+    }
+</div>

@@ -1,0 +1,11 @@
+<div class="card-container">
+    <div class="problems-list">
+        @for (problem of problems; track problem.n) {
+            <button [routerLink]="['/problem', problem.n]" [class.has-solution]="hasSolution(problem.n)" [disabled]="!hasSolution(problem.n)">
+                <div>
+                    {{problem.n}}
+                </div>
+            </button>
+        }
+    </div>
+</div>

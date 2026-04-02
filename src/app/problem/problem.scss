@@ -1,0 +1,54 @@
+@use '@angular/material' as mat;
+
+:host {
+    @include mat.icon-button-overrides((
+        icon-color: orange,
+    ));
+}
+
+.problem-body {
+    margin: 16px;
+}
+
+.visualization {
+    min-height: 200px;
+    min-width: 200px;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.runner-container {
+    display: flex;
+    flex: 0 1;
+    flex-direction: row;
+    justify-content: center;
+    margin: 16px;
+
+    .runner-body {
+        display: flex;
+        flex: 0 1;
+        flex-direction: row;
+        justify-content: center;
+        padding: 16px;
+        margin: 10px;
+    }
+
+    .runner-toolbar {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .error {
+        margin: 10px 20px;
+    }
+}
+
+.code-container {
+    margin: 16px;
+
+    pre {
+        margin: 0;
+        padding: 16px;
+    }
+}

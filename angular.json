@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "euler-viewer": {
+    "euler": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -24,10 +24,19 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "euler-scraper/scraped"
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/katex/dist/katex.min.css"
+            ],
+            "scripts": [
+              "node_modules/katex/dist/katex.min.js",
+              "node_modules/katex/dist/contrib/auto-render.min.js"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",
@@ -63,10 +72,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "euler-viewer:build:production"
+              "buildTarget": "euler:build:production"
             },
             "development": {
-              "buildTarget": "euler-viewer:build:development"
+              "buildTarget": "euler:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,10 +92,19 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "euler-scraper/scraped"
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/katex/dist/katex.min.css"
+            ],
+            "scripts": [
+              "node_modules/katex/dist/katex.min.js",
+              "node_modules/katex/dist/contrib/auto-render.min.js"
             ]
           }
         }

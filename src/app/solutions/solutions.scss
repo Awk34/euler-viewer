@@ -1,0 +1,39 @@
+@use "sass:color";
+
+.card-container {
+    padding: 20px;
+
+    $button-color: #984825;
+    $button-text-color: #f4f4f4;
+
+    .problems-list {
+        button {
+            //cursor: pointer;
+            width: 3rem;
+            height: 3rem;
+            margin: 1px;
+            border: none;
+            border-radius: 4px;
+
+            &:disabled {
+                background-color: #404040;
+                cursor: not-allowed;
+                color: $button-text-color;
+            }
+        }
+
+        button.has-solution {
+            background-color: $button-color;
+            color: $button-text-color;
+
+            &:hover {
+                background-color: color.adjust($button-color, $lightness: -10%);
+            }
+
+            &:active {
+                background-color: color.adjust($button-color, $lightness: -15%);
+                transform: translateY(1px);
+            }
+        }
+    }
+}
