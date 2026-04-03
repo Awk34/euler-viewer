@@ -4,14 +4,14 @@ pub fn main() -> u64 {
     let mut max: u64 = 0;
 
     for i in 0..988 {
-//        println!("{}", STR[i..(i+13)].to_string());
+//        crate::console_println!("{}", STR[i..(i+13)].to_string());
 
         let product: u64 = STR[i..(i+13)]
             .chars()
             .map(|c| c.to_string().parse::<u64>().unwrap())
             .product();
 
-//        println!("{}", product);
+//        crate::console_println!("{}", product);
 
         if product > max {
             max = product;

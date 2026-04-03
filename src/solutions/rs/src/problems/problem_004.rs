@@ -41,7 +41,7 @@ pub fn main() -> i32 {
         }
 
         if has_proper_factors {
-            // println!("{}", str);
+            // crate::console_println!("{}", str);
             break;
         } else {
             n = n - 1;

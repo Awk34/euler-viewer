@@ -15,6 +15,10 @@ export class Solution extends Euler {
         marky.mark('euler-1');
     }
 
+    override supportsVisualization(): boolean {
+        return true;
+    }
+
     override initChart() {
         if (!this.hasVisualization()) {
             throw new Error('Cannot init chart without visualization');

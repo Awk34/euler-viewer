@@ -17,9 +17,9 @@ fn is_prime(n: u32) -> bool {
 const NUM: u64 = 600851475143;
 
 pub fn main() -> u32 {
-	println!("{}", is_prime(13));
+	crate::console_println!("{}", is_prime(13));
 
-	println!("{}", NUM);
+	crate::console_println!("{}", NUM);
 
     0
 }

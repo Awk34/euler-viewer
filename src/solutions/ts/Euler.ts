@@ -79,6 +79,14 @@ export class Euler {
     hasVisualization() {
         return this.enableVisualization;
     }
+    
+    /**
+     * Override this to return true if the problem supports visualization.
+     */
+    supportsVisualization(): boolean {
+        return false;
+    }
+
     setHasVisualization(enable: boolean) {
         this.enableVisualization = enable;
     }

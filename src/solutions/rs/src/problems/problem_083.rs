@@ -70,10 +70,10 @@ fn add_to_open(weight_map: [[u32; 5]; 5], heuristic_map: &Vec<Vec<u32>>, pos: Op
 
     if test.is_ok() {
         let position = open[test.unwrap()].position;
-        println!("Ok: {}, {}", position[0], position[1]);
-        println!("Open: ");
+        crate::console_println!("Ok: {}, {}", position[0], position[1]);
+        crate::console_println!("Open: ");
         for i in 0..open.len() {
-            println!("  ({}, {}), {}", open[i].position[0], open[i].position[1], open[i].f);
+            crate::console_println!("  ({}, {}), {}", open[i].position[0], open[i].position[1], open[i].f);
         }
     }
 
@@ -161,11 +161,11 @@ pub fn main() -> u32 {
 
     while position != END_POSITION {
         let next = open.remove(0);
-        println!("Next: ({}, {})", next.position[0], next.position[1]);
+        crate::console_println!("Next: ({}, {})", next.position[0], next.position[1]);
         solution += next.g;
 
         if next.position[0] == END_POSITION[0] && next.position[1] == END_POSITION[1] {
-            println!("Reached end!");
+            crate::console_println!("Reached end!");
 
             return solution;
         }

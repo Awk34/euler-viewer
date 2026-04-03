@@ -5,8 +5,9 @@
         "ng": "ng",
         "script:manifest": "node scripts/generate-manifest.js",
         "script:txt": "find ./solutions -type f \\( -name \"*.ts\" -o -name \"*.rs\" -o -name \"*.java\" \\) -exec cp {} {}.txt \\;",
-        "start": "npm run script:manifest && ng serve",
-        "build": "npm run script:manifest && ng build",
+        "build:wasm": "export PATH=\"$HOME/.cargo/bin:$PATH\" && cd src/solutions/rs && wasm-pack build --target web --out-dir ../../../public/rs-pkg",
+        "start": "npm run script:manifest && npm run build:wasm && ng serve",
+        "build": "npm run script:manifest && npm run build:wasm && ng build",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
         "serve:ssr:euler": "node dist/euler/server/server.mjs"

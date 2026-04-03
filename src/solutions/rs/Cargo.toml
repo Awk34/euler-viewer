@@ -2,7 +2,24 @@
 name = "euler"
 version = "0.1.0"
 authors = ["Andrew Koroluk <koroluka@gmail.com>"]
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 primal = "0.2"
-time = "0.1"
+time = { version = "0.1" }
+wasm-bindgen = "0.2"
+console_error_panic_hook = "0.1"
+serde = { version = "1.0", features = ["derive"] }
+serde-wasm-bindgen = "0.6"
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+  "console",
+  "Window",
+  "Performance",
+]
+

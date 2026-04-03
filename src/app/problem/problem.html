@@ -31,20 +31,20 @@
             </div>
         } @else {
             <div>
-                <span>Duration: {{ duration() || 'n/a' }}</span>
-                <br />
-                <span>Solution: {{ solution() || 'n/a' }}</span>
-                <br />
-                <span>Steps: {{ steps() }}</span>
-                <br />
-                <span
-                    >Correct: <mat-icon>{{ resultIcon() }}</mat-icon></span
-                >
+                <p>Duration: {{ duration() || 'n/a' }}</p>
+                <p>Solution: {{ solution() || 'n/a' }}</p>
+                <p>Steps: {{ steps() }}</p>
+                <span>
+                    Correct: <mat-icon>{{ resultIcon() }}</mat-icon>
+                </span>
             </div>
         }
     </mat-card>
 
-    <div class="visualization" #viz></div>
+    <div class="visualization" [class.hidden]="!hasVisualization()" #viz></div>
+    @if (!hasVisualization()) {
+        <div>No visualization available</div>
+    }
 </div>
 
 <div class="code-container">

@@ -1,45 +1,38 @@
-import {Component, OnDestroy, OnInit, inject, signal, ElementRef, viewChild, PLATFORM_ID, Inject} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {ReplaySubject, Subscription} from 'rxjs';
-import {SolutionLoader} from '../services/solution-loader';
-import {MatIconButton} from '@angular/material/button';
-import {MatIcon} from '@angular/material/icon';
-import {Euler} from 'src/solutions/ts/Euler';
+import { Component, OnDestroy, OnInit, inject, signal, ElementRef, viewChild, PLATFORM_ID, Inject, effect } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ReplaySubject, Subscription } from 'rxjs';
+import { SolutionLoader } from '../services/solution-loader';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { Euler } from 'src/solutions/ts/Euler';
 import hljs from 'highlight.js';
-import {AsyncPipe} from '@angular/common';
-import {MatToolbar} from '@angular/material/toolbar';
-import {MarkdownComponent} from 'ngx-markdown';
-import {BarChart, BarChartData} from 'src/charts/bar-chart';
-import {NumberChart} from '../../charts/number-chart';
+import { AsyncPipe } from '@angular/common';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MarkdownComponent } from 'ngx-markdown';
+import { BarChart, BarChartData } from 'src/charts/bar-chart';
+import { NumberChart } from '../../charts/number-chart';
 import { isPlatformBrowser } from '@angular/common';
-import {BaseChart} from '../../charts/base-chart';
-import {MatCard} from '@angular/material/card';
+import { BaseChart } from '../../charts/base-chart';
+import { MatCard } from '@angular/material/card';
 
 @Component({
-  selector: 'app-problem',
-    imports: [
-        AsyncPipe,
-        MarkdownComponent,
-        MatIcon,
-        MatIconButton,
-        MatToolbar,
-        MatCard,
-    ],
-  templateUrl: './problem.html',
-  styleUrl: './problem.scss',
+    selector: 'app-problem',
+    imports: [AsyncPipe, MarkdownComponent, MatIcon, MatIconButton, MatToolbar, MatCard],
+    templateUrl: './problem.html',
+    styleUrl: './problem.scss',
 })
 export class Problem implements OnInit, OnDestroy {
-    viz = viewChild<ElementRef<HTMLButtonElement>>('viz');
+    viz = viewChild<ElementRef<HTMLDivElement>>('viz');
 
     problemNumber!: number;
     private routeSubscription: Subscription | undefined;
-    error: string|undefined;
+    error: string | undefined;
     protected selectedLang = signal(Lang.js);
     public Lang = Lang;
     hasTsSolution = signal(false);
     hasRustSolution = signal(false);
     hasJavaSolution = signal(false);
-    tsSolution: Euler|undefined;
+    tsSolution: Euler | undefined;
     running = false;
     duration = signal('');
     solution = signal(NaN);
@@ -56,15 +49,17 @@ export class Problem implements OnInit, OnDestroy {
 
     private solutionLoader = inject(SolutionLoader);
 
-    constructor(private route: ActivatedRoute,
-                @Inject(PLATFORM_ID) private platformId: Object) {
+    constructor(
+        private route: ActivatedRoute,
+        @Inject(PLATFORM_ID) private platformId: Object,
+    ) {
         this.isBrowser = isPlatformBrowser(platformId);
     }
 
     ngOnInit(): void {
         this.jsText.next('');
 
-        this.routeSubscription = this.route.params.subscribe(params => {
+        this.routeSubscription = this.route.params.subscribe((params) => {
             // The route parameter is a string, so we convert it to a number.
             // This assumes your route is configured with a parameter, e.g., '/problem/:id'
             const id = params['id'];
@@ -107,7 +102,7 @@ export class Problem implements OnInit, OnDestroy {
         console.log(this.x);
 
         if (this.chart) {
-          this.chart.update([this.x]);
+            this.chart.update([this.x]);
         }
     }
 
@@ -122,26 +117,39 @@ export class Problem implements OnInit, OnDestroy {
 
         const solutionsModule = await this.solutionLoader.loadSolutions(this.problemNumber);
 
-        if(hasTsSolution) {
+        if (hasTsSolution) {
             this.hasTsSolution.set(true);
+            const tsSolutionClass = solutionsModule.TsSolution!;
             if (this.isBrowser) {
-                this.tsSolution = new solutionsModule.TsSolution!(this.viz!()!.nativeElement);
-                this.hasVisualization.set(this.tsSolution.hasVisualization());
-                this.tsSolution.initChart();
-                this.chart = this.tsSolution!.getVisualization();
+                // Wait for the visualization element to be available from the viewChild signal
+                const vizRef = this.viz();
+                if (vizRef) {
+                    this.tsSolution = new tsSolutionClass(vizRef.nativeElement);
+                    const hasViz = this.tsSolution.hasVisualization();
+                    this.hasVisualization.set(hasViz);
+                    if (hasViz) {
+                        setTimeout(() => {
+                            this.tsSolution!.initChart();
+                            this.chart = this.tsSolution!.getVisualization();
+                        }, 100);
+                    }
+                } else {
+                    console.warn('Visualization element not found during initProblem');
+                    this.tsSolution = new tsSolutionClass();
+                }
             } else {
-                this.tsSolution = new solutionsModule.TsSolution!();
+                this.tsSolution = new tsSolutionClass();
             }
             this.jsText.next(hljs.highlightAuto(solutionsModule.tsText!.trim()).value);
         }
-        if(hasRustSolution) {
+        if (hasRustSolution) {
             this.hasRustSolution.set(true);
             this.rustText.next(hljs.highlightAuto(solutionsModule.rustText!.trim()).value);
             if (!hasTsSolution) {
                 this.selectedLang.set(Lang.rust);
             }
         }
-        if(hasJavaSolution) {
+        if (hasJavaSolution) {
             this.hasJavaSolution.set(true);
             this.javaText.next(hljs.highlightAuto(solutionsModule.javaText!.trim()).value);
             if (!hasTsSolution && !hasRustSolution) {
@@ -154,17 +162,42 @@ export class Problem implements OnInit, OnDestroy {
     async run() {
         this.resultIcon.set('pending_outline');
 
-        if(!this.tsSolution) return;
         this.running = true;
-        let {duration, solution, steps} = await this.tsSolution.run();
-        this.duration.set(`${duration}ms`);
-        this.solution.set(solution);
-        this.steps.set(steps);
-        // @ts-ignore
-        const isCorrect = this.knownSolution
-            ? solution == this.knownSolution
-            : null;
-        this.resultIcon.set(isCorrect ? 'check_circle_outline' : 'error_outline');
+
+        if (this.selectedLang() === Lang.js) {
+            if (!this.tsSolution) {
+                this.running = false;
+                return;
+            }
+            let { duration, solution, steps } = await this.tsSolution.run();
+            this.duration.set(`${duration}ms`);
+            this.solution.set(solution);
+            this.steps.set(steps);
+            // @ts-ignore
+            const isCorrect = this.knownSolution ? solution == this.knownSolution : null;
+            this.resultIcon.set(isCorrect ? 'check_circle_outline' : 'error_outline');
+        } else if (this.selectedLang() === Lang.rust) {
+            try {
+                // @ts-ignore
+                const wasmPath = '/rs-pkg/' + 'euler.js';
+                const wasm = await import(/* @vite-ignore */ wasmPath);
+                await wasm.default(); // init
+                const result = wasm.run_problem(this.problemNumber);
+
+                this.duration.set(`${result.duration}ms`);
+                this.solution.set(result.solution);
+                this.steps.set(result.steps);
+
+                // @ts-ignore
+                const isCorrect = this.knownSolution ? result.solution == this.knownSolution : null;
+                this.resultIcon.set(isCorrect ? 'check_circle_outline' : 'error_outline');
+            } catch (e: any) {
+                console.error('Rust WASM error:', e);
+                this.error = 'WASM error: ' + e.toString();
+                this.resultIcon.set('error_outline');
+            }
+        }
+
         this.running = false;
     }
 
@@ -173,7 +206,14 @@ export class Problem implements OnInit, OnDestroy {
         this.selectedLang.set(lang);
         this.duration.set('');
         this.solution.set(NaN);
+        this.steps.set(0);
         this.resultIcon.set('pending_outline');
+
+        if (lang === Lang.js && this.tsSolution) {
+            this.hasVisualization.set(this.tsSolution.hasVisualization());
+        } else {
+            this.hasVisualization.set(false);
+        }
     }
 
     ngOnDestroy(): void {
@@ -181,8 +221,8 @@ export class Problem implements OnInit, OnDestroy {
     }
 }
 
-function assertExists<T>(value:T, message="Value not defined"): asserts value is Exclude<T, null|undefined> {
-	if(value===null || value === undefined) throw new Error(message);
+function assertExists<T>(value: T, message = 'Value not defined'): asserts value is Exclude<T, null | undefined> {
+    if (value === null || value === undefined) throw new Error(message);
 }
 
 export enum Lang {
