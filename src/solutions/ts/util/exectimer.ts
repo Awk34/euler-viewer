@@ -6,6 +6,11 @@ import * as marky from 'marky';
  */
 export const timers = new Map<string, Timer>();
 
+export function clear() {
+  timers.clear();
+  marky.clear();
+}
+
 export class Timer {
   ticks: Tick[] = [];
 

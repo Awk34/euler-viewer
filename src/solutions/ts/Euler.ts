@@ -1,5 +1,5 @@
 import * as marky from 'marky';
-import {Tick, timers, timer} from './util/exectimer';
+import {Tick, timers, timer, clear} from './util/exectimer';
 import {BaseChart} from '../../charts/base-chart';
 
 export class Euler {

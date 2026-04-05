@@ -14,6 +14,7 @@ import { NumberChart } from '../../charts/number-chart';
 import { isPlatformBrowser } from '@angular/common';
 import { BaseChart } from '../../charts/base-chart';
 import { MatCard } from '@angular/material/card';
+import { clear as execTimerClear } from '../../solutions/ts/util/exectimer';
 
 @Component({
     selector: 'app-problem',
@@ -46,6 +47,7 @@ export class Problem implements OnInit, OnDestroy {
     chart!: BaseChart<any>;
     private readonly isBrowser: boolean;
     private x = 0;
+    private tsSolutionClass?: any;
 
     private solutionLoader = inject(SolutionLoader);
 
@@ -119,13 +121,13 @@ export class Problem implements OnInit, OnDestroy {
 
         if (hasTsSolution) {
             this.hasTsSolution.set(true);
-            const tsSolutionClass = solutionsModule.TsSolution!;
+            this.tsSolutionClass = solutionsModule.TsSolution!;
             if (this.isBrowser) {
                 // Wait for the visualization element to be available from the viewChild signal
                 const vizRef = this.viz();
                 if (vizRef) {
-                    this.tsSolution = new tsSolutionClass(vizRef.nativeElement);
-                    const hasViz = this.tsSolution.hasVisualization();
+                    this.tsSolution = new this.tsSolutionClass(vizRef.nativeElement);
+                    const hasViz = this.tsSolution!.hasVisualization();
                     this.hasVisualization.set(hasViz);
                     if (hasViz) {
                         setTimeout(() => {
@@ -135,10 +137,10 @@ export class Problem implements OnInit, OnDestroy {
                     }
                 } else {
                     console.warn('Visualization element not found during initProblem');
-                    this.tsSolution = new tsSolutionClass();
+                    this.tsSolution = new this.tsSolutionClass();
                 }
             } else {
-                this.tsSolution = new tsSolutionClass();
+                this.tsSolution = new this.tsSolutionClass();
             }
             this.jsText.next(hljs.highlightAuto(solutionsModule.tsText!.trim()).value);
         }
@@ -163,14 +165,43 @@ export class Problem implements OnInit, OnDestroy {
         this.resultIcon.set('pending_outline');
 
         this.running = true;
+        this.reset();
 
         if (this.selectedLang() === Lang.js) {
+            if (!this.tsSolutionClass) {
+                this.running = false;
+                return;
+            }
+
+            // Clear global timers and marks before each run
+            execTimerClear();
+
+            // Re-instantiate to reset internal state
+            if (this.isBrowser) {
+                const vizRef = this.viz();
+                if (vizRef) {
+                    this.tsSolution = new this.tsSolutionClass(vizRef.nativeElement);
+                    if (this.tsSolution!.hasVisualization()) {
+                        this.tsSolution!.initChart();
+                        this.chart = this.tsSolution!.getVisualization();
+                    }
+                } else {
+                    this.tsSolution = new this.tsSolutionClass();
+                }
+            } else {
+                this.tsSolution = new this.tsSolutionClass();
+            }
+
             if (!this.tsSolution) {
                 this.running = false;
                 return;
             }
             let { duration, solution, steps } = await this.tsSolution.run();
-            this.duration.set(`${duration}ms`);
+            if (duration < 1) {
+                this.duration.set(`${duration}ms`);
+            } else {
+                this.duration.set(`${Math.round(duration)}ms`);
+            }
             this.solution.set(solution);
             this.steps.set(steps);
             // @ts-ignore
@@ -201,12 +232,16 @@ export class Problem implements OnInit, OnDestroy {
         this.running = false;
     }
 
-    selectLang(lang: Lang) {
-        console.info(`Selected language: ${lang}`);
-        this.selectedLang.set(lang);
+    reset() {
         this.duration.set('');
         this.solution.set(NaN);
         this.steps.set(0);
+    }
+
+    selectLang(lang: Lang) {
+        console.info(`Selected language: ${lang}`);
+        this.selectedLang.set(lang);
+        this.reset();
         this.resultIcon.set('pending_outline');
 
         if (lang === Lang.js && this.tsSolution) {

@@ -19,7 +19,7 @@
 <div class="runner-container">
     <mat-card class="runner-body">
         <div class="runner-toolbar">
-            <button mat-icon-button="filled" (click)="run()">
+            <button mat-icon-button="filled" (click)="run()" [disabled]="running">
                 <!-- <button mat-icon-button="filled" [disabled]="selectedLang() !== Lang.js" (click)="run()"> -->
                 <mat-icon>play_arrow</mat-icon>
             </button>
